@@ -143,3 +143,8 @@ venv.bak/
 
 #Backup files
 *.py.bak
+
+# data
+data/
+entity2wikidata.json
+wget-log
