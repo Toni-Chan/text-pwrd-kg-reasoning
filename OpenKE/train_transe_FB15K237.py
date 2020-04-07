@@ -48,7 +48,7 @@ with open("/home/ubuntu/text-pwrd-kg-reasoning/OpenKE/benchmarks/FB15K237/entity
 # create weight matrix for entity
 matrix_len = train_dataloader.get_ent_tot()
 weights_matrix = np.zeros((matrix_len, 200))
-not_found = 0
+
 
 for i in range(max_id):
 	entity = id2entity[i]
@@ -60,8 +60,8 @@ for i in range(max_id):
 		try:
 			weights_matrix[i] += glove[wrd]
 		except KeyError:
-			weights_matrix[i] = glove['unk']
-			not_found += 1
+			weights_matrix[i] += glove['unk']
+	weights_matrix[i] /= len(words)
 
 # define the model
 transe = TransE(
