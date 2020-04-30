@@ -5,7 +5,7 @@ import openke
 from openke.config import Trainer, Tester
 from openke.module.model import TransE
 from openke.module.loss import MarginLoss
-from openke.module.strategy import NegativeSampling
+from openke.module.strategy import NegativeSampling, SimilarityRegulated
 from openke.data import TrainDataLoader, TestDataLoader
 
 # dataloader for training
@@ -75,7 +75,8 @@ transe = TransE(
 
 
 # define the loss function
-model = NegativeSampling(
+# model = NegativeSampling(
+model = SimilarityRegulated(
 	model = transe,
 	loss = MarginLoss(margin = 5.0),
 	batch_size = train_dataloader.get_batch_size()
