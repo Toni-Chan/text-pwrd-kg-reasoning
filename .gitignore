@@ -148,3 +148,6 @@ venv.bak/
 data/
 entity2wikidata.json
 wget-log
+OpenKE/benchmarks/
+OpenKE/*.npy
+datasets/

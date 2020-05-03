@@ -5,7 +5,7 @@ from .Model import Model
 
 class TransE(Model):
 
-	def __init__(self, ent_tot, rel_tot, ent_weight, dim = 100, p_norm = 1, norm_flag = True, margin = None, epsilon = None):
+	def __init__(self, ent_tot, rel_tot, ent_weight = None, dim = 100, p_norm = 1, norm_flag = True, margin = None, epsilon = None):
 		super(TransE, self).__init__(ent_tot, rel_tot)
 		
 		self.dim = dim
@@ -15,8 +15,9 @@ class TransE(Model):
 		self.p_norm = p_norm
 
 		self.ent_embeddings = nn.Embedding(self.ent_tot, self.dim)
-		ent_weight= torch.tensor(ent_weight, dtype=torch.float64)
-		self.ent_embeddings.load_state_dict({'weight': ent_weight})
+		if ent_weight is not None:
+			ent_weight= torch.tensor(ent_weight, dtype=torch.float64)
+			self.ent_embeddings.load_state_dict({'weight': ent_weight})
 		self.rel_embeddings = nn.Embedding(self.rel_tot, self.dim)
 
 		if margin == None or epsilon == None:

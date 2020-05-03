@@ -5,9 +5,11 @@ from __future__ import print_function
 from .Strategy import Strategy
 from .NegativeSampling import NegativeSampling
 from .SimRegulated import SimilarityRegulated
+from .GloveSim import GloveSimGeneral
 
 __all__ = [
     'Strategy',
     'NegativeSampling',
     'SimilarityRegulated',
+    'GloveSimGeneral'
 ]

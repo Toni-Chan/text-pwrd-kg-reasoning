@@ -24,7 +24,6 @@ class Trainer(object):
 				 opt_method = "sgd",
 				 save_steps = None,
 				 checkpoint_dir = None,
-				 sim_weight = None
 				 ):
 
 		self.work_threads = 8
@@ -41,7 +40,6 @@ class Trainer(object):
 		self.use_gpu = use_gpu
 		self.save_steps = save_steps
 		self.checkpoint_dir = checkpoint_dir
-		self.sim_weight = sim_weight
 
 	def train_one_step(self, data):
 		self.optimizer.zero_grad()
@@ -52,57 +50,9 @@ class Trainer(object):
 			'batch_y': self.to_var(data['batch_y'], self.use_gpu),
 			'mode': data['mode']
 		})
-
-		### vectorize
-		## load sparse matrix
-		rows, cols = self.sim_weight.nonzero()
-		head = data['batch_h']
-		tail = data['batch_t']
-		# data(69628, )(69628, ) head.shape,tail.shape
-		## add similarity regularization term
-		head_batch= []
-		tail_batch = []
-		head_sim = []
-		tail_sim = []
-		for item in zip(head,tail):
-			val1 = item[0]
-			val2 = item[1]
-			if min(val1,val2) in rows and max(val1,val2) in cols:
-				head_batch.append(val1)
-				tail_batch.append(val2)
-				head_sim.append(min(val1,val2))
-				tail_sim.append(max(val1,val2))
-
-		head_batch = Variable(torch.LongTensor(head_batch).cuda())
-		tail_batch = Variable(torch.LongTensor(tail_batch).cuda())
-		embed_weight = self.model.model.ent_embeddings.weight
-		head_weight = embed_weight[head_batch]
-		tail_weight = embed_weight[tail_batch]
-		# (batch_size, 1, 200,) (batch_size, 200, 1)
-		batch_weight = torch.bmm(head_weight.unsqueeze(1), tail_weight.unsqueeze(2)).view(-1)
-		sim_weight = Variable(torch.from_numpy(self.sim_weight[head_sim,tail_sim]).cuda()).view(-1)
-		# print("weight size",batch_weight.size(), sim_weight.size())
-		regularized_loss = torch.sum((batch_weight - sim_weight) **2)
-		## loop
-		# for i in range():
-		# 	cur_head = embed_weight[[head[i]]]
-		# 	cur_tail = embed_weight[tail[i]]
-		# 	head_idx = head[i].cpu().detach().numpy()
-		# 	tail_idx = tail[i].cpu().detach().numpy()
-		# 	fin_key = str(head_idx) + '_' + str(tail_idx) if head_idx < tail_idx else str(tail_idx) + '_' + str(
-		# 		head_idx)
-		# 	if fin_key in self.sim_weight.keys():
-		# 		similarity = torch.Tensor([self.sim_weight[fin_key]]).cuda()
-		# 		# print(similarity)
-		# 		dist = (torch.dot(cur_head, cur_tail.T) - torch.log(similarity)) ** 2
-		# 		regularized_loss.append(dist)
-		# regularized_loss = torch.cat(regularized_loss)
-		# regularized_loss = torch.sum(regularized_loss)
-		loss += regularized_loss
 		## backward
 		loss.backward()
 		self.optimizer.step()
-		print("step")
 		return loss.item()
 
 	def run(self):
