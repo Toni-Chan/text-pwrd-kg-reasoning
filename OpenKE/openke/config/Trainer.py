@@ -23,7 +23,8 @@ class Trainer(object):
 				 use_gpu = True,
 				 opt_method = "sgd",
 				 save_steps = None,
-				 checkpoint_dir = None):
+				 checkpoint_dir = None,
+				 ):
 
 		self.work_threads = 8
 		self.train_times = train_times
@@ -49,8 +50,9 @@ class Trainer(object):
 			'batch_y': self.to_var(data['batch_y'], self.use_gpu),
 			'mode': data['mode']
 		})
+		## backward
 		loss.backward()
-		self.optimizer.step()		 
+		self.optimizer.step()
 		return loss.item()
 
 	def run(self):
