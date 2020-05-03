@@ -145,6 +145,5 @@ venv.bak/
 *.py.bak
 
 # data
-data/
 entity2wikidata.json
 wget-log
