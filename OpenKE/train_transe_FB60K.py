@@ -35,11 +35,11 @@ model = GloveSimGeneral(
 	model = transe,
 	loss = MarginLoss(margin = 5.0),
 	batch_size = train_dataloader.get_batch_size(),
-	sim_regul_rate = 0.2,
+	sim_regul_rate = 0.05,
 	weight_matrix = sim_weight
 )
 # train the model
-trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 1000, alpha = 1.0, use_gpu = True)
+trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 100, alpha = 1.0, use_gpu = True)
 trainer.run()
 transe.save_checkpoint('./checkpoint/transe.ckpt')
 
