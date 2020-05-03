@@ -6,10 +6,14 @@ from .Strategy import Strategy
 from .NegativeSampling import NegativeSampling
 from .SimRegulated import SimilarityRegulated
 from .GloveSim import GloveSimGeneral
+from .CosineSimilarityRegulated import CosineSimilarityRegulated
+from .APSynRegulated import APSynRegulated
 
 __all__ = [
     'Strategy',
     'NegativeSampling',
     'SimilarityRegulated',
-    'GloveSimGeneral'
+    'GloveSimGeneral',
+    'CosineSimilarityRegulated',
+    'APSynRegulated'
 ]
