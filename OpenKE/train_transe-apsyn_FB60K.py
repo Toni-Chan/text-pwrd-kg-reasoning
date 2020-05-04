@@ -1,7 +1,7 @@
 '''
 @Author: your name
 @Date: 2020-05-01 21:07:37
-@LastEditTime: 2020-05-03 23:29:24
+@LastEditTime: 2020-05-03 23:36:51
 @LastEditors: Please set LastEditors
 @Description: In User Settings Edit
 @FilePath: /final/text-pwrd-kg-reasoning/OpenKE-OpenKE-PyTorch/train_transe_FB15K237.py
@@ -10,13 +10,13 @@ import openke
 from openke.config import Trainer, Tester
 from openke.module.model import TransE
 from openke.module.loss import MarginLoss
-from openke.module.strategy import CosineSimilarityRegulated
+from openke.module.strategy import APSynRegulated
 from openke.data import TrainDataLoader, TestDataLoader
 
 # dataloader for training
 train_dataloader = TrainDataLoader(
 	in_path = "./benchmarks/FB60K/", 
-	nbatches = 600,
+	nbatches = 1000,
 	threads = 8, 
 	sampling_mode = "normal", 
 	bern_flag = 1, 
@@ -37,7 +37,7 @@ transe = TransE(
 
 
 # define the loss function
-model = CosineSimilarityRegulated(
+model = APSynRegulated(
 	model = transe, 
 	loss = MarginLoss(margin = 5.0),
 	batch_size = train_dataloader.get_batch_size(),
